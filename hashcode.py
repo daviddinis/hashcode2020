@@ -1,7 +1,7 @@
 import numpy as np
 
 # read file and store each line
-fp = open('a_example.txt', 'r')
+fp = open('d_tough_choices.txt', 'r')
 data = fp.readlines()
 problemData = data[0].replace('\n', '').split(' ')
 totalDays = problemData[2]
@@ -19,8 +19,6 @@ def main():
 
     #SORTING LIBS
     libs.sort(reverse=True,key=sortLibScore)
-    for x in libs:
-        print(x.maxScore)
 
     simulateDays(libs)
 
@@ -34,7 +32,6 @@ def simulateDays(libs):
                 day += libs[id].signUpTime
         for i in range(0, id):
             libs[i].scanBooks()
-            print(libs[i].sentBooks)
 
     submission(id, libs)
 
@@ -44,8 +41,10 @@ def submission(id, libs):
     sub.write('\n')
     
     for i in range(0, id):
-        sub.write(str(libs[i].id) + ' ' + str(libs[i].countBookSent()) + '\n')
-        sub.write(libs[i].orderedBookSent() + '\n')
+        count = libs[i].countBookSent()
+        if (count >= 0):
+            sub.write(str(libs[i].id) + ' ' + str(count) + '\n')
+            sub.write(libs[i].orderedBookSent() + '\n')
 
 
 
@@ -83,7 +82,6 @@ class Library:
         for x in self.bookArray :
             self.bookScore+= int(books[int(x)])
         self.bookArray.sort(reverse=True, key=sortBookScore)
-        print(self.bookArray)
 
     def nextBook(self):
         if (self.bookArrayIndex >= len(self.bookArray)):
@@ -91,7 +89,6 @@ class Library:
 
         if (not scannedBooks[int(self.bookArray[int(self.bookArrayIndex)])] ):
             index = int(self.bookArrayIndex)
-            print(index)
             self.sentBooks[index] = True
             scannedBooks[int(self.bookArray[int(self.bookArrayIndex)])] = True
             self.bookArrayIndex += 1
